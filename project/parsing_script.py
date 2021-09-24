@@ -9,24 +9,23 @@ import config
 
     
 
-def parsing_date(url, file):
+def parsing_date(url, file_name):
     response = requests.get(url, verify = False)
     if response.status_code == 200:
         srs = response.text
         soup = BeautifulSoup(srs, "html.parser")
-        fout =  codecs.open(f'project/{file}', 'r', "utf-8")
+        file =  codecs.open(f'project/{file_name}', 'r', "utf-8")
 
-        if fout.read() != str(soup.find(class_='last-update-date').string):
-            fout =  codecs.open('project/last_update_date1.txt', 'w+', "utf-8")
+        if file.read() != str(soup.find(class_='last-update-date').string):
+            file =  codecs.open(f'project/{file_name}', 'w+', "utf-8")
             print('Не совпадают')              
-            fout.seek(0)
             update_date_as_syte = soup.find(class_='last-update-date').string
-            send_in_telegram(update_date_as_syte)
-            fout.write(update_date_as_syte)
-            fout.close()
+            send_to_telegram(update_date_as_syte)
+            file.write(update_date_as_syte)
+            file.close()
 
         else:
-            fout.close()
+            file.close()
             print('Cовпадают')
     else:
         print(response.status_code)
@@ -34,7 +33,7 @@ def parsing_date(url, file):
 
 
 
-def send_in_telegram(mesege_for_telegram):
+def send_to_telegram(mesege_for_telegram):
     print(f'Запущен{mesege_for_telegram}')
     url = f'https://api.telegram.org/bot{config.token}/sendMessage'
     data = {'chat_id': config.channel_name, 'text': mesege_for_telegram}
