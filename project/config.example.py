@@ -5,3 +5,4 @@ name_file_1 = 'last_update_date1.txt'
 name_file_2 = 'last_update_date2.txt'
 chanell_from = ''
 channel_name = ''
+delay = 60 #сек
